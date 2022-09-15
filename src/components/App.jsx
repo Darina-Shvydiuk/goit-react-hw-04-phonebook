@@ -4,12 +4,22 @@ import { Filter } from './Filter';
 import { ContactList } from './ContactList';
 import s from './App.module.css';
 
-const CONTACTS = localStorage.getItem('contacts');
+const CONTACTS = 'contacts';
 
 const getLocalData = () => JSON.parse(localStorage.getItem(CONTACTS));
 
+const initialContacts = [
+  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+];
+
 export const App = () => {
-  const [contacts, setContacts] = useState(() => getLocalData ?? []);
+  const [contacts, setContacts] = useState(
+    () => getLocalData() ?? initialContacts
+  );
+  console.log(contacts);
   const [filter, setFilter] = useState('');
 
   // state = {
@@ -21,9 +31,19 @@ export const App = () => {
   //   ],
   //   filter: '',
   // };
-  // const CONTACTS = localStorage.getItem('contacts');
 
   useEffect(() => {
+    // const dataFromLocalStorage = getLocalData();
+    // console.log(dataFromLocalStorage);
+    // if (!dataFromLocalStorage) {
+    //   console.log(dataFromLocalStorage);
+    //   setContacts([
+    //     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    //     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    //   ]);
+    // }
     localStorage.setItem(CONTACTS, JSON.stringify(contacts));
   }, [contacts]);
 
@@ -51,7 +71,7 @@ export const App = () => {
       return;
     }
 
-    setContacts(prevState => prevState.contacts, data);
+    setContacts(prevContacts => [...prevContacts, data]);
   };
 
   const handleFilter = event => {
@@ -59,9 +79,7 @@ export const App = () => {
   };
 
   const handleDelete = toDelete => {
-    setContacts(prevState =>
-      prevState.contacts.filter(({ id }) => id !== toDelete)
-    );
+    setContacts(contacts.filter(({ id }) => id !== toDelete));
   };
 
   const normalizedFilter = filter.toLowerCase();
