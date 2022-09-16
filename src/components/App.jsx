@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
@@ -46,10 +46,18 @@ export const App = () => {
     setContacts(contacts.filter(({ id }) => id !== toDelete));
   };
 
-  const normalizedFilter = filter.toLowerCase();
-  const filterContacts = contacts.filter(recordName =>
-    recordName.name.toLowerCase().includes(normalizedFilter)
-  );
+  // const normalizedFilter = filter.toLowerCase();
+
+  // const filterContacts = contacts.filter(recordName =>
+  //   recordName.name.toLowerCase().includes(normalizedFilter)
+  // );
+
+  const filterContacts = useMemo(() => {
+    const normalizedFilter = filter.toLowerCase();
+    contacts.filter(recordName =>
+      recordName.name.toLowerCase().includes(normalizedFilter)
+    );
+  }, [contacts, filter]);
 
   return (
     <div className={s.container}>
