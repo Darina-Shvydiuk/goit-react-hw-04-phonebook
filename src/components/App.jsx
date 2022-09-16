@@ -54,7 +54,7 @@ export const App = () => {
 
   const filterContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
-    contacts.filter(recordName =>
+    return contacts.filter(recordName =>
       recordName.name.toLowerCase().includes(normalizedFilter)
     );
   }, [contacts, filter]);
